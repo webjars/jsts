@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+
+  <packaging>jar</packaging>
+  <groupId>org.webjars</groupId>
+  <artifactId>jsts</artifactId>
+  <version>0.14.0-SNAPSHOT</version>
+  <name>JavaScript Topology Suite</name>
+  <description>WebJar for JavaScript Topology Suite</description>
+  <url>http://webjars.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <upstream.version>0.14.0</upstream.version>
+    <upstream.url>https://github.com/bjornharrtell/jsts/releases/download/0.14.0/jsts-0.14.0.zip</upstream.url>
+    <destDir>${project.build.outputDirectory}/META-INF/resources/webjars/${project.artifactId}/${upstream.version}</destDir>
+    <workDir>${project.build.directory}/${project.artifactId}</workDir>
+    <requirejs>
+      {
+      "paths": {
+      "${project.artifactId}": "${project.artifactId}"
+      }
+      }
+    </requirejs>
+  </properties>
+
+  <developers>
+    <developer>
+      <name>Mitch Kyle</name>
+      <email>mitch.tux@gmail.com</email>
+      <timezone>-4</timezone>
+    </developer>
+  </developers>
+
+  <licenses>
+    <license>
+      <name>Apache</name>
+      <url>2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <url>http://github.com/webjars/jsts</url>
+    <connection>scm:git:https://github.com/webjars/jsts.git</connection>
+    <developerConnection>scm:git:https://github.com/webjars/jsts.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <build>
+    <plugins>
+      <plugin>
+	<artifactId>maven-antrun-plugin</artifactId>
+	<version>1.7</version>
+	<executions>
+	  <execution>
+	    <phase>process-resources</phase>
+	    <goals>
+	      <goal>run</goal>
+	    </goals>
+	    <configuration>
+	      <target>
+		<get src="${upstream.url}" dest="${project.build.directory}/${project.artifactId}.zip" />
+		<unzip src="${project.build.directory}/${project.artifactId}.zip" dest="${workDir}" />
+		<copy verbose="true" todir="${destDir}">
+		  <fileset dir="${workDir}/lib" />
+		</copy>
+	      </target>
+	    </configuration>
+	  </execution>
+	</executions>
+      </plugin>
+
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-release-plugin</artifactId>
+	<version>2.5</version>
+      </plugin>
+
+      <plugin>
+	<groupId>org.sonatype.plugins</groupId>
+	<artifactId>nexus-staging-maven-plugin</artifactId>
+	<version>1.5.1</version>
+	<extensions>true</extensions>
+	<configuration>
+	  <serverId>sonatype-nexus-staging</serverId>
+	  <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+	  <autoReleaseAfterClose>true</autoReleaseAfterClose>
+	</configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
